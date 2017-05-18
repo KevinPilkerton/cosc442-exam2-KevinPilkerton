@@ -126,28 +126,43 @@ public class Creature {
 		this.mana = maxMana;
 		this.regenManaPer1000 = 20;
 	}
-	
-	public void moveBy(int mx, int my, int mz){
+	public void moveZoneNegative1(int mz, Tile tile)
+	{
+		if (mz == -1)
+		{
+			if (tile == Tile.STAIRS_DOWN) 
+			{
+				doAction("walk up the stairs to level %d", z+mz+1);
+			} 
+			else 
+			{
+				doAction("try to go up but are stopped by the cave ceiling");
+				return;
+			}
+		} 
+	}
+	public void moveZonePositive1(int mz, Tile tile)
+	{
+		if (tile == Tile.STAIRS_UP) 
+		{
+			doAction("walk down the stairs to level %d", z+mz+1);
+		} 
+		else
+		{
+			doAction("try to go down but are stopped by the cave floor");
+			return;
+		}
+	}
+	public void moveBy(int mx, int my, int mz)
+	{
 		if (mx==0 && my==0 && mz==0)
 			return;
 		
 		Tile tile = world.tile(x+mx, y+my, z+mz);
 		
-		if (mz == -1){
-			if (tile == Tile.STAIRS_DOWN) {
-				doAction("walk up the stairs to level %d", z+mz+1);
-			} else {
-				doAction("try to go up but are stopped by the cave ceiling");
-				return;
-			}
-		} else if (mz == 1){
-			if (tile == Tile.STAIRS_UP) {
-				doAction("walk down the stairs to level %d", z+mz+1);
-			} else {
-				doAction("try to go down but are stopped by the cave floor");
-				return;
-			}
-		}
+		moveZoneNegative1(mz, tile);
+		
+		moveZonePositive1(mz, tile);
 		
 		Creature other = world.creature(x+mx, y+my, z+mz);
 		
@@ -455,16 +470,23 @@ public class Creature {
 			weapon = null;
 		}
 	}
-	
+	public void checkInventoryFull(Inventory Inventory, Item item)
+	{
+		if (inventory.isFull()) 
+		{
+			notify("Can't equip %s since you're holding too much stuff.", nameOf(item));
+			return;
+		} 
+		else
+		{
+			world.remove(item);
+			inventory.add(item);
+		}
+	}
 	public void equip(Item item){
-		if (!inventory.contains(item)) {
-			if (inventory.isFull()) {
-				notify("Can't equip %s since you're holding too much stuff.", nameOf(item));
-				return;
-			} else {
-				world.remove(item);
-				inventory.add(item);
-			}
+		if (!inventory.contains(item)) 
+		{
+			checkInventoryFull(inventory, item);
 		}
 		
 		if (item.attackValue() == 0 && item.rangedAttackValue() == 0 && item.defenseValue() == 0)
