@@ -35,9 +35,48 @@ public class World {
 		}
 		return null;
 	}
+	private boolean xTile(int x, int width)
+	{
+		boolean check = false;
+		if (x < 0 || x >= width)
+		{
+			check = true;
+		}
+		else
+		{
+			check = false;
+		}
+		return check;
+	}
+	private boolean yTile(int y, int height)
+	{
+		boolean check = false;
+		if (y < 0 || y >= height)
+		{
+			check = true;
+		}
+		else
+		{
+			check = false;
+		}
+		return check;
+	}
 	
-	public Tile tile(int x, int y, int z){
-		if (x < 0 || x >= width || y < 0 || y >= height || z < 0 || z >= depth)
+	private boolean zTile(int z, int depth)
+	{
+		boolean check = false;
+		if (z < 0 || z >= depth)
+		{
+			check = true;
+		}
+		else
+		{
+			check = false;
+		}
+		return check;
+	}
+	public Tile tile(int x, int y, int z){ 
+		if ((xTile(x, width))|| (yTile(y, height)) || (zTile(z, depth)))
 			return Tile.BOUNDS;
 		else
 			return tiles[x][y][z];
