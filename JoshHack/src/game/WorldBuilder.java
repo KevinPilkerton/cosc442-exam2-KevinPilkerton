@@ -156,18 +156,21 @@ public class WorldBuilder {
 		}
 		while (candidates.size() / stairs > 250);
 	}
-
+	public void tileFloor(int x, int y, int z, int r1, int r2, ArrayList<Point> candidates)
+	{
+		if (tiles[x][y][z] == Tile.FLOOR
+				&& tiles[x][y][z+1] == Tile.FLOOR
+				&& regions[x][y][z] == r1 
+				&& regions[x][y][z+1] == r2){
+			candidates.add(new Point(x,y,z));
+		}
+	}
 	public List<Point> findRegionOverlaps(int z, int r1, int r2) {
 		ArrayList<Point> candidates = new ArrayList<Point>();
 		
 		for (int x = 0; x < width; x++){
 			for (int y = 0; y < height; y++){
-				if (tiles[x][y][z] == Tile.FLOOR
-						&& tiles[x][y][z+1] == Tile.FLOOR
-						&& regions[x][y][z] == r1 
-						&& regions[x][y][z+1] == r2){
-					candidates.add(new Point(x,y,z));
-				}
+				tileFloor(x, y, z, r1, r2, candidates);
 			}
 		}
 		
