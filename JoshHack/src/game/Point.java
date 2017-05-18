@@ -24,22 +24,36 @@ public class Point {
 		result = prime * result + z;
 		return result;
 	}
-
+	private boolean checkIfCoordinatesEqualOther(int x, int y, int z, Point other)
+	{
+		boolean equals = false;
+		if (x != other.x)
+			equals = false;
+		if (y != other.y)
+			equals = false;
+		if (z != other.z)
+			equals = false;
+		
+		return equals;
+	}
+	private boolean handleObjectInstance(Object obj)
+	{
+		boolean instance = false;
+		if (!(obj instanceof Point))
+			instance = false;
+		else
+			instance = true;
+		return instance;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Point))
-			return false;
+		handleObjectInstance(obj);
 		Point other = (Point) obj;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		if (z != other.z)
-			return false;
+		checkIfCoordinatesEqualOther(x, y, z, other);
 		return true;
 	}
 
