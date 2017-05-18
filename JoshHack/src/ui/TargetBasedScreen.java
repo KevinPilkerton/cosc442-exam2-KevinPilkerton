@@ -34,9 +34,15 @@ public abstract class TargetBasedScreen implements Screen {
 		terminal.clear(' ', 0, 23, 80, 1);
 		terminal.write(caption, 0, 23);
 	}
-
+	public void checkIfPossible(int x, int y, int px, int py)
+	{
+		if (!isAcceptable(player.x + x, player.y + y)){
+			x = px;
+			y = py;
+		}
+	}
 	@Override
-	public Screen respondToUserInput(KeyEvent key) {
+	public Screen respondToUserInput(KeyEvent key) { 
 		int px = x;
 		int py = y;
 
@@ -57,10 +63,7 @@ public abstract class TargetBasedScreen implements Screen {
 		case KeyEvent.VK_ESCAPE: return null;
 		}
 		
-		if (!isAcceptable(player.x + x, player.y + y)){
-			x = px;
-			y = py;
-		}
+		checkIfPossible(x, y, px, py);
 		
 		enterWorldCoordinate(player.x + x, player.y + y, sx + x, sy + y);
 		
